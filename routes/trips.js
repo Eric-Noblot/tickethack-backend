@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const Trip = require('../models/trips');
+const Cart = require('../models/carts');
 const moment = require("moment")
 
 
@@ -30,6 +31,23 @@ router.post("/", (req, res) => {
 			res.json({result: true, allTrips : data})
 		}
 	})
+})
+
+router.post("/store", (req, res) => {
+	const newCart = new Cart({
+		isPaid:false,
+		trip:req.body.id
+	});
+
+	newCart.save().then(() => {
+		res.json({result:true})
+	})
+})
+
+router.get("/getcarts", (req, res) => {
+	Cart.find({isPaid:false}).then(trips => {
+		res.json({trips})
+	});
 })
 
   
